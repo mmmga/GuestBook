@@ -1,0 +1,27 @@
+version: "2"
+services:
+  nginx:
+      build:
+          context: ./nginx
+      ports:
+          - "8080:80"
+      volumes:
+          - ./app:/var/app
+  fpm:
+      build:
+          context: ./fpm
+      volumes:
+          - ./app:/var/app
+      expose:
+          - "9000"
+    #   environment:
+    #       - "DB_HOST2=db"
+      env_file:
+          - ./.env
+  db:
+      image: mariadb
+      environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_DATABASE=guestbook
+      volumes:
+          - ./database:/var/lib/mysql
